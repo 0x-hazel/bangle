@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bangle! View</title>
+<% include!("./header.stpl"); %>
+</head>
+<body>
+<iframe name="dummy" id="dummy" style="display:none"></iframe>
+<div class=header>
+<h1>Bangle!</h1>
+</div>
+<div class=body>
+<h2>List <%= list.0 %></h2>
+<p>List <%= list | dbg %></p>
+<a href="/?l=<%=list.0%>&k=<%=list.3%>">Read</a>
+<a href="/?l=<%=list.0%>&k=<%=list.2%>">Edit</a>
+<form id="base" method="post" action="/base" target="dummy">
+<fieldset>
+<legend>Set fallback search engine</legend>
+<p>Currently: <%= list.1 %></p>
+<input type="hidden" name="list" value="<%=list.0%>" />
+<input type="hidden" name="key"  value="<%=list.2%>" />
+<input type="text" name="url" placeholder="Fallback URL" />
+<input type="reset" value="Update" onclick="submitForm('base')" />
+</fieldset>
+</form>
+<hr />
+<ul>
+<% for bang in bangs.iter() { %>
+    <li>
+    <form id="del" method="post" action="/del" target="dummy">
+        <%= bang | dbg %>
+        <input type="hidden" name="list" value="<%=list.0%>" />
+        <input type="hidden" name="key"  value="<%=list.2%>" />
+        <input type="hidden" name="bang" value="<%=bang.0%>" />
+        <input type="reset" value="X" onclick="submitForm('del')" />
+    </form>
+    </li>
+<% } %>
+</ul>
+<form id="add" method="post" action="/add" target="dummy">
+<fieldset>
+<legend>Add a new bang</legend>
+<input type="hidden" name="list" value="<%=list.0%>" />
+<input type="hidden" name="key"  value="<%=list.2%>" />
+<p>! <input type="text" name="bang" placeholder="bang" /> <input type="text" name="url" placeholder="url (%s is replaced with search query)" /></p>
+<input type="reset" value="Add" onclick="submitForm('add')" />
+</fieldset>
+</form>
+<script src="/res/script.js"></script>
+</body>
+</html>

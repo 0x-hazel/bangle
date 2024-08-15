@@ -1,0 +1,15 @@
+<html>
+<head>
+<% include!("./header.stpl"); %>
+</head>
+<body>
+<div class=header>
+<h1>Bangle!</h1>
+</div>
+<div class=body>
+<form method="post" action="/create">
+<input type="submit" value="Create a Bangle!" />
+</form>
+</div>
+</body>
+</html>

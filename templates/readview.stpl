@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bangle! View</title>
+<% include!("./header.stpl"); %>
+</head>
+<body>
+<div class=header>
+<h1>Bangle!</h1>
+</div>
+<div class=body>
+<form action="/!">
+<input type="hidden" name="l" value="<%=list.0%>" />
+<input type="hidden" name="k"  value="<%=list.3%>" />
+<input name="q" type="text" />
+<input type="submit" value="Go" />
+</form>
+<h2>List <%= list.0 %></h2>
+<a href="/?l=<%=list.0%>&k=<%=list.3%>">Read</a>
+<hr />
+<ul>
+<% for bang in bangs.iter() { %>
+    <li><%= bang | dbg %></li>
+<% } %>
+</ul>
+</div>
+<script src="/res/script.js"></script>
+</body>
+</html>

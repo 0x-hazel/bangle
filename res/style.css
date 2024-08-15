@@ -1,0 +1,16 @@
+.header {
+    background-color: darkturquoise;
+    position: absolute;
+    height: 8em;
+    top: -2em;
+    width: 101vw;
+    transform: rotate(-2deg) translateX(-.7em);
+}
+.header > h1 {
+    transform: rotate(2deg);
+    margin: 2em 1em;
+}
+.body {
+    position: absolute;
+    top: 8em;
+}

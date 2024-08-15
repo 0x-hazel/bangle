@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<title>Bangle! Error</title>
+<% include!("./header.stpl"); %>
+<head>
+<body>
+<div class=header>
+<h1>Bangle!</h1>
+</div>
+<div class=body>
+<p>Error: <%= err %></p>
+</div>
+</body>
+</html>

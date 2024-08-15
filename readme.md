@@ -52,5 +52,5 @@ All Bangle! lists have a hardcoded `!bangs` bang, that brings you to the list pa
     - [ ] Some sort of messaging system for errors
 - [ ] Bugfixing
     - [X] Adding a new bang doesn't validate the key
-    - [ ] Bangs that don't exist are silently elided from the query
+    - [X] Bangs that don't exist are silently elided from the query
     - [ ] There are probably many undiscovered bugs

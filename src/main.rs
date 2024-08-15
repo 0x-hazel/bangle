@@ -117,12 +117,14 @@ async fn search(
             if opts.query == "!bangs" { return Redirect::to(&format!("/?l={}&k={}", opts.list, opts.key)).into_response() }
             let (bang, query) = match opts.query.chars().next() {
                 Some('!') => {
-                    let split = opts.query.split_once(' ').expect("Failed to split query string for bang");
-                    (&split.0[1..], split.1)
+                    let split = opts.query.split_once(' ');
+                    match split {
+                        None => (opts.query.as_str(), ""),
+                        Some(split) => (&split.0[1..], split.1),
+                    }
                 },
                 _ => ("", opts.query.as_str())
             };
-            println!("{}, {}", bang, query);
             let url: (String, Option<String>) = sqlx::query_as("SELECT lists.fallback, coalesce((SELECT bangs.link FROM bangs INNER JOIN lists ON lists.id = bangs.list_id WHERE bangs.list_id = $1 AND bangs.bang = $2 AND (lists.read_pw = $3 OR lists.edit_pw = $3)), null) FROM lists")
                 .bind(opts.list)
                 .bind(bang)
@@ -131,15 +133,11 @@ async fn search(
                 .await
                 .expect("Failed to query url of query")
                 .expect("Unable to get data from url query");
-            println!("{:?}", url);
-            let url = match url.1 {
-                None => url.0,
-                Some(x) => x,
+            let (url, query) = match url.1 {
+                None => (url.0, opts.query.as_str()),
+                Some(x) => (x, query),
             };
-            println!("{}", url);
             let url = url.replace("%s", query);
-            println!("{}", url);
-            println!("---");
             Redirect::to(&url).into_response()
         }
     }

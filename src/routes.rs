@@ -59,13 +59,26 @@ pub async fn search(
                 Some('!') => {
                     let split = opts.query.split_once(' ');
                     match split {
-                        None => (opts.query.as_str(), ""),
+                        None => (&opts.query.as_str()[1..], ""),
                         Some(split) => (&split.0[1..], split.1),
                     }
                 },
                 _ => ("", opts.query.as_str())
             };
-            let url: (String, Option<String>) = sqlx::query_as("SELECT lists.fallback, coalesce((SELECT bangs.link FROM bangs INNER JOIN lists ON lists.id = bangs.list_id WHERE bangs.list_id = $1 AND bangs.bang = $2 AND (lists.read_pw = $3 OR lists.edit_pw = $3)), null) FROM lists")
+            let url: (String, Option<String>) = sqlx::query_as(
+                    "SELECT 
+                    lists.fallback, 
+                    coalesce((
+                        SELECT bangs.link 
+                        FROM bangs 
+                        INNER JOIN lists 
+                        ON lists.id = bangs.list_id 
+                        WHERE bangs.list_id = $1 
+                        AND bangs.bang = $2 
+                        AND (lists.read_pw = $3 OR lists.edit_pw = $3
+                    )), null) 
+                    FROM lists"
+                )
                 .bind(opts.list)
                 .bind(bang)
                 .bind(&opts.key)

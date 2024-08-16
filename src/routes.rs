@@ -20,13 +20,14 @@ pub async fn index(
     match opts {
         None => Html(Index.render_once().expect("Unable to render index template")),
         Some(o) => {
-            let list: Option<templates::List> = sqlx::query_as("SELECT * FROM lists WHERE id = $1")
+            let list: Option<templates::List> = sqlx::query_as("SELECT * FROM lists WHERE id = $1 AND (read_pw = $2 OR edit_pw = $2)")
                 .bind(o.list)
+                .bind(&o.key)
                 .fetch_optional(&state.pool)
                 .await
                 .expect("Unable to query list");
             Html(match list {
-                None => BangleError {err: "No such list exists"}.render_once(),
+                None => BangleError {err: "Incorrect list number or key"}.render_once(),
                 Some(l) => {
                     let bangs: Vec<BangEntry> = sqlx::query_as("SELECT bang, link FROM bangs WHERE list_id = $1")
                         .bind(l.0)

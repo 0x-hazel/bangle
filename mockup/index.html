@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bangle! View</title>
+        <meta charset="UTF-8">
+        <meta content="width=device-width,initial-scale=1.0" name="viewport">
+        <link href="style.css" media="all" rel="stylesheet">
+    </head>
+    <body>
+        <iframe name="dummy" id="dummy" style="display:none"></iframe>
+        <div class="swoosh shadow-2"></div>
+        <div class="swoosh shadow-1"></div>
+        <div class="swoosh header">
+            <h1>Bangle<span class=bang>!</span></h1>
+        </div>
+        <div class=body>
+            <h2>List 0</h2>
+            <p>List details go here</p>
+            <a href="/?l=<%=list.0%>&k=<%=list.3%>">Read</a>
+            <a href="/?l=<%=list.0%>&k=<%=list.2%>">Edit</a>
+            <form id="base" method="post" action="/base" target="dummy">
+                <fieldset>
+                <legend>Set fallback search engine</legend>
+                <p>Currently: (default url)</p>
+                <input type="hidden" name="list" value="<%=list.0%>" />
+                <input type="hidden" name="key"  value="<%=list.2%>" />
+                <input type="text" name="url" placeholder="Fallback URL" />
+                <input type="reset" value="Update" onclick="submitForm('base')" />
+                </fieldset>
+            </form>
+            <ul class="bangs-list">
+                <li>
+                <form id="del" method="post" action="/del" target="dummy">
+                    <%= bang | dbg %>
+                    <input type="hidden" name="list" value="<%=list.0%>" />
+                    <input type="hidden" name="key"  value="<%=list.2%>" />
+                    <input type="hidden" name="bang" value="<%=bang.0%>" />
+                    <input type="reset" value="X" onclick="submitForm('del')" />
+                </form>
+                </li>
+                <li>
+                    <form id="del" method="post" action="/del" target="dummy">
+                        <%= bang | dbg %>
+                        <input type="hidden" name="list" value="<%=list.0%>" />
+                        <input type="hidden" name="key"  value="<%=list.2%>" />
+                        <input type="hidden" name="bang" value="<%=bang.0%>" />
+                        <input type="reset" value="X" onclick="submitForm('del')" />
+                    </form>
+                </li>
+            </ul>
+            <form id="add" method="post" action="/add" target="dummy">
+                <fieldset>
+                <legend>Add a new bang</legend>
+                <input type="hidden" name="list" value="<%=list.0%>" />
+                <input type="hidden" name="key"  value="<%=list.2%>" />
+                <p>! <input type="text" class="input-bang" name="bang" placeholder="bang" /> <input type="text" class="input-url" name="url" placeholder="url (%s is replaced with search query)" /></p>
+                <div class="add-bang">
+                <input type="reset" value="Add" onclick="submitForm('add')" />
+                </div>
+                </fieldset>
+            </form>
+        </div>
+        <script src="/res/script.js"></script>
+    </body>
+</html>

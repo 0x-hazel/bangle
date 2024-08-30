@@ -39,7 +39,7 @@ All Bangle! lists have a hardcoded `!bangs` bang, that brings you to the list pa
 ## Roadmap
 
 - [ ] Refactoring
-    - [ ] Split sections out into their own modules
+    - [X] Split sections out into their own modules
     - [ ] Commenting
     - [ ] General refactoring to make the code nicer
 - [ ] Further Features

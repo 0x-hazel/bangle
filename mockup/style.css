@@ -10,7 +10,7 @@
 .swoosh {
     position: absolute;
     height: 6em;
-    top: 0;
+    top: -1em;
     left: -1em;
     width: 110vw;
     transform-origin: top right;
@@ -29,7 +29,7 @@
 }
 .header > h1 {
     transform: rotate(2deg);
-    margin: 1.5em 1em;
+    margin: 1.75em 1em;
     color: var(--banner-alt);
 }
 .bang {
@@ -80,22 +80,34 @@ input[type=reset]:hover {
 }
 .bangs-list {
     list-style-type: none;
+    margin: 1em;
 }
 .bangs-list > li::before {
     content: '!';
     color: var(--banner-alt);
     font-weight: bold;
-    margin-left: -20px;
-    margin-right: 5px;
+    margin-left: -25px;
+    margin-right: 0px;
 }
 .bangs-list > li > form {
     display: inline-block;
+    width: 100%;
 }
 .input-bang {
     width: 20%;
 }
 .input-url {
     width: 70%;
+}
+.btn {
+    padding-left: 24px;
+}
+.btn-icon {
+    position: absolute;
+    margin: 4px;
+}
+.btns {
+    float: right;
 }
 @media screen and (max-width: 768px) {
     .swoosh {

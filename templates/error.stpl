@@ -4,11 +4,16 @@
 <% include!("./header.stpl"); %>
 <head>
 <body>
-<div class=header>
-<h1>Bangle!</h1>
+<div class="swoosh shadow-2"></div>
+<div class="swoosh shadow-1"></div>
+<div class="swoosh header">
+    <h1>Bangle<span class=bang>!</span></h1>
 </div>
 <div class=body>
 <p>Error: <%= err %></p>
+<div class="center">
+    <a href="/">Back to main page</a>
+</div>
 </div>
 </body>
 </html>

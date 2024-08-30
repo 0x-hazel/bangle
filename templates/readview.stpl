@@ -5,22 +5,26 @@
 <% include!("./header.stpl"); %>
 </head>
 <body>
-<div class=header>
-<h1>Bangle!</h1>
+<div class="swoosh shadow-2"></div>
+<div class="swoosh shadow-1"></div>
+<div class="swoosh header">
+    <h1>Bangle<span class=bang>!</span></h1>
 </div>
 <div class=body>
-<form action="/!">
+<form action="/!" class="search-bar">
 <input type="hidden" name="l" value="<%=list.0%>" />
 <input type="hidden" name="k"  value="<%=list.3%>" />
-<input name="q" type="text" />
-<input type="submit" value="Go" />
+<input name="q" class="search" placeholder="Search with this list" type="text" />
+<svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
 </form>
 <h2>List <%= list.0 %></h2>
 <a href="/?l=<%=list.0%>&k=<%=list.3%>">Read</a>
 <hr />
-<ul>
+<ul class="bangs-list">
 <% for bang in bangs.iter() { %>
-    <li><%= bang | dbg %></li>
+    <li>
+        <span><%=bang.0%></span> — <span><%=bang.1%></span>
+    </li>
 <% } %>
 </ul>
 </div>

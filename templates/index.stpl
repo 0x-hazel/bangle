@@ -3,12 +3,18 @@
 <% include!("./header.stpl"); %>
 </head>
 <body>
-<div class=header>
-<h1>Bangle!</h1>
+<div class="swoosh shadow-2"></div>
+<div class="swoosh shadow-1"></div>
+<div class="swoosh header">
+    <h1>Bangle<span class=bang>!</span></h1>
 </div>
 <div class=body>
+<h2>Welcome to Bangle!</h2>
+<p>Brief description of what bangle is and how to use it goes here</p>
 <form method="post" action="/create">
+<div class="center">
 <input type="submit" value="Create a Bangle!" />
+</div>
 </form>
 </div>
 </body>

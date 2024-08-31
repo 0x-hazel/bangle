@@ -11,13 +11,13 @@
     <h1>Bangle<span class=bang>!</span></h1>
 </div>
 <div class=body>
+<h2>List <%= list.0 %></h2>
 <form action="/!" class="search-bar">
 <input type="hidden" name="l" value="<%=list.0%>" />
 <input type="hidden" name="k"  value="<%=list.3%>" />
 <input name="q" class="search" placeholder="Search with this list" type="text" />
 <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
 </form>
-<h2>List <%= list.0 %></h2>
 <a href="/?l=<%=list.0%>&k=<%=list.3%>">Read</a>
 <hr />
 <ul class="bangs-list">
@@ -28,6 +28,5 @@
 <% } %>
 </ul>
 </div>
-<script src="/res/script.js"></script>
 </body>
 </html>

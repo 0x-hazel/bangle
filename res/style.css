@@ -93,6 +93,7 @@ input[type=reset]:hover, input[type=submit]:hover {
 .bangs-list > li > form {
     display: inline-block;
     width: 100%;
+    margin-bottom: .5em;
 }
 .input-bang {
     width: 20%;

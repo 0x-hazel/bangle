@@ -22,6 +22,7 @@ async fn main(#[shuttle_shared_db::Postgres] pool: PgPool) -> shuttle_axum::Shut
         .route("/create", post(routes::create))
         .route("/add", post(routes::add))
         .route("/del", post(routes::del))
+        .route("/edit", post(routes::edit))
         .route("/base", post(routes::set_base))
         .nest_service("/res", ServeDir::new("res"))
         .with_state(app_state);

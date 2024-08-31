@@ -1,9 +1,11 @@
 mod properties;
+mod responses;
 
-use axum::{debug_handler, extract::{Query, State}, response::{Html, IntoResponse, Redirect, Response}, Form};
+use axum::{debug_handler, extract::{Query, State}, response::{Html, IntoResponse, Redirect, Response}, Form, Json};
 use base64::prelude::{Engine, BASE64_URL_SAFE_NO_PAD as BASE64};
 use properties::*;
 use rand::RngCore;
+use responses::*;
 use sailfish::TemplateOnce;
 
 use crate::{templates::{self, *}, ServerState};
@@ -120,7 +122,7 @@ pub async fn create(
 pub async fn add(
     State(state): State<ServerState>,
     Form(data): Form<AddBang>,
-) {
+) -> Json<AddResponse> {
     let list = sqlx::query("SELECT * FROM lists WHERE id = $1 AND edit_pw = $2")
         .bind(data.list)
         .bind(&data.key)
@@ -128,15 +130,21 @@ pub async fn add(
         .await
         .expect("Unable to query table to insert bang");
     if list.is_some() {
-        sqlx::query("INSERT INTO bangs VALUES ($1, $2, $3)")
+        if sqlx::query("INSERT INTO bangs VALUES ($1, $2, $3)")
             .bind(data.list)
             .bind(data.bang)
             .bind(data.url)
             .bind(data.key)
             .execute(&state.pool)
-            .await
-            .expect("Unable to insert bang");
+            .await.is_ok() {
+                return Json(AddResponse {
+                    success: true
+                })
+            }
     }
+    Json(AddResponse {
+        success: false
+    })
 }
 
 /// Removes a bang from the given list
@@ -144,14 +152,47 @@ pub async fn add(
 pub async fn del(
     State(state): State<ServerState>,
     Form(data): Form<DelBang>,
-) {
-    sqlx::query("DELETE FROM bangs USING lists WHERE bangs.list_id = $1 AND lists.id=bangs.list_id AND bangs.bang = $2 AND lists.edit_pw = $3")
+) -> Json<DeleteResponse> {
+    match sqlx::query("DELETE FROM bangs USING lists WHERE bangs.list_id = $1 AND lists.id=bangs.list_id AND bangs.bang = $2 AND lists.edit_pw = $3")
         .bind(data.list)
-        .bind(data.bang)
+        .bind(&data.bang)
         .bind(data.key)
         .execute(&state.pool)
-        .await
-        .expect("Unable to delete bang");
+        .await {
+            Ok(_) => Json(DeleteResponse {
+                success: true,
+                bang: data.bang
+            }),
+            Err(_) => Json(DeleteResponse {
+                success: false,
+                bang: data.bang
+            })
+        }
+}
+
+#[debug_handler]
+pub async fn edit(
+    State(state): State<ServerState>,
+    Form(data): Form<EditBang>
+) -> Json<EditResponse> {
+    match sqlx::query("UPDATE bangs SET link = $1 FROM lists WHERE bangs.list_id = $2 AND lists.id=bangs.list_id AND bangs.bang = $3 AND lists.edit_pw = $4")
+        .bind(&data.url)
+        .bind(data.list)
+        .bind(&data.bang)
+        .bind(data.key)
+        .execute(&state.pool)
+        .await {
+            Ok(_) => Json(EditResponse {
+                success: true,
+                bang: data.bang,
+                url: data.url
+            }),
+            Err(_) => Json(EditResponse {
+                success: false,
+                bang: data.bang,
+                url: String::from("")
+            })
+        }
 }
 
 /// Updates the default search engine for the given list

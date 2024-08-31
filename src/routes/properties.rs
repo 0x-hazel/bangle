@@ -44,3 +44,12 @@ pub struct DelBang {
     pub key: String,
     pub bang: String,
 }
+
+/// Form Data provided to the corresponding route for editing a bang on the list
+#[derive(Debug, Deserialize)]
+pub struct EditBang {
+    pub list: i32,
+    pub key: String,
+    pub bang: String,
+    pub url: String,
+}

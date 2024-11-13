@@ -1,10 +1,19 @@
+const template = document.getElementById('template');
+
 function add() {
     let form = document.forms['add'];
     let frame = document.getElementById('dummy');
     frame.onload = () => {
         let result = JSON.parse(frame.contentDocument.body.innerText);
         if (result.success) {
-            location.replace(location.href)
+            let entry = template.innerHTML
+            entry = entry.replace(/%name%/g, result.details.name)
+            entry = entry.replace(/%id%/g, result.details.id)
+            entry = entry.replace(/%url%/g, result.details.url)
+            entry = entry.replace(/%key%/g, result.details.key)
+            document.getElementById('bangs-list').innerHTML += entry
+            form.querySelector('.input-bang').value = ""
+            form.querySelector('.input-url').value = ""
         } else {
             // show some kind of error message?
         }
@@ -66,4 +75,18 @@ function cancel(id) {
     form.querySelector('.btns-main').style.display = 'inline';
     form.setAttribute('action', '/del');
     form.removeAttribute('onsubmit')
+}
+
+function setFallback(id) {
+    let form = document.forms[id];
+    let frame = document.getElementById('dummy');
+    frame.onload = () => {
+        let result = JSON.parse(frame.contentDocument.body.innerText);
+        if (result.success) {
+            form.querySelector('.fallback').innerText = "Currently: " + result.current;
+        } else {
+            // show some kind of error message?
+        }
+    }
+    form.submit();
 }

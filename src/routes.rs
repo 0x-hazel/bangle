@@ -132,18 +132,25 @@ pub async fn add(
     if list.is_some() {
         if sqlx::query("INSERT INTO bangs VALUES ($1, $2, $3)")
             .bind(data.list)
-            .bind(data.bang)
-            .bind(data.url)
-            .bind(data.key)
+            .bind(&data.bang)
+            .bind(&data.url)
+            .bind(&data.key)
             .execute(&state.pool)
             .await.is_ok() {
                 return Json(AddResponse {
-                    success: true
+                    success: true,
+                    details: Some(AddResponseDetails {
+                        name: data.bang,
+                        url: data.url,
+                        id: data.list,
+                        key: data.key
+                    }),
                 })
             }
     }
     Json(AddResponse {
-        success: false
+        success: false,
+        details: None,
     })
 }
 
@@ -200,13 +207,21 @@ pub async fn edit(
 pub async fn set_base(
     State(state): State<ServerState>,
     Form(data): Form<SetBase>,
-) {
+) -> Json<ChangeDefaultResponse> {
     println!("{:?}", data);
-    sqlx::query("UPDATE lists SET fallback = $1 WHERE id = $2 AND edit_pw = $3")
-        .bind(data.url)
+    match sqlx::query("UPDATE lists SET fallback = $1 WHERE id = $2 AND edit_pw = $3")
+        .bind(&data.url)
         .bind(data.list)
         .bind(data.key)
         .execute(&state.pool)
-        .await
-        .expect("Unable to update list fallback url");
+        .await {
+        Ok(_) => Json(ChangeDefaultResponse {
+            success: true,
+            current: data.url,
+        }),
+        Err(_) => Json(ChangeDefaultResponse {
+            success: false,
+            current: String::new()
+        })
+    }
 }

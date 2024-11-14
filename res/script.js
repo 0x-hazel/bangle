@@ -77,16 +77,44 @@ function cancel(id) {
     form.removeAttribute('onsubmit')
 }
 
-function setFallback(id) {
-    let form = document.forms[id];
+function defaultFallback(e) {
+    let selected = e.children[e.selectedIndex].value;
+    let url = document.getElementById('engine-select-url');
+    if (selected === 'custom') {
+        url.value = ""
+        url.removeAttribute('hidden')
+    } else if (selected === 'ddg') {
+        url.value = "https://duckduckgo.com/search?q=%s"
+        url.setAttribute('hidden', true)
+    }
+}
+
+function fallbackSubmit(form) {
     let frame = document.getElementById('dummy');
     frame.onload = () => {
         let result = JSON.parse(frame.contentDocument.body.innerText);
         if (result.success) {
-            form.querySelector('.fallback').innerText = "Currently: " + result.current;
+            form.querySelector('.fallback').innerText = result.current;
+            setFavicon(result.current);
+            let selector = document.getElementById('preset-search-selector');
+            selector.selectedIndex = 0
+            defaultFallback(selector)
         } else {
             // show some kind of error message?
         }
     }
-    form.submit();
+    form.submit()
 }
+
+function setFavicon(address) {
+    try {
+        let url = new URL(address);
+        document.getElementById('favicon').setAttribute('src', url.origin + '/favicon.ico');
+    } catch (e) {
+        document.getElementById('favicon').setAttribute('src', '');
+    }
+}
+
+(function() {
+    setFavicon(document.getElementById('current-search-engine').innerText);
+})();

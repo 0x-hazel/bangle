@@ -23,15 +23,19 @@
 <p>List <%= list | dbg %></p>
 <a href="/?l=<%=list.0%>&k=<%=list.3%>">Read</a>
 <a href="/?l=<%=list.0%>&k=<%=list.2%>">Edit</a>
-<form id="base" method="post" action="/base" target="dummy">
+<form id="base" method="post" action="/base" onsubmit="fallbackSubmit(this)" target="dummy">
 <fieldset>
-<legend>Set fallback search engine</legend>
-<p class="fallback">Currently: <%= list.1 %><% if list.1.is_empty() {%>Not set<%} %></p>
+<legend>Set search engine</legend>
+<p>Currently: <img id="favicon" class="favicon"></img><span id="current-search-engine" class="fallback"><%= list.1 %><% if list.1.is_empty() {%>Not set<%} %></span></p>
 <input type="hidden" name="list" value="<%=list.0%>" />
 <input type="hidden" name="key"  value="<%=list.2%>" />
 <div class="center">
-<input type="text" name="url" placeholder="Fallback URL" />
-<input type="reset" value="Update" onclick="setFallback('base')" />
+<select id="preset-search-selector" onchange="defaultFallback(this)">
+    <option value="custom">Custom</option>
+    <option value="ddg">DuckDuckGo</option>
+</select> <br />
+<input type="text" id="engine-select-url" name="url" placeholder="Search Engine URL" />
+<input type="reset" value="Update" onclick="fallbackSubmit(document.getElementById('base'))" />
 </div>
 </fieldset>
 </form>

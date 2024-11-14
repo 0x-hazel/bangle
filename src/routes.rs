@@ -208,7 +208,6 @@ pub async fn set_base(
     State(state): State<ServerState>,
     Form(data): Form<SetBase>,
 ) -> Json<ChangeDefaultResponse> {
-    println!("{:?}", data);
     match sqlx::query("UPDATE lists SET fallback = $1 WHERE id = $2 AND edit_pw = $3")
         .bind(&data.url)
         .bind(data.list)

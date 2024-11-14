@@ -76,6 +76,16 @@ input[type=reset], input[type=submit] {
 input[type=reset]:hover, input[type=submit]:hover {
     background-color: var(--body);
 }
+select {
+    border-radius: .5em;
+    border: 2px solid var(--body);
+    background-color: var(--main);
+    color: var(--main-text);
+    margin-bottom: .5em;
+}
+select:hover {
+    cursor: pointer;
+}
 .center {
     text-align: center;
 }
@@ -121,6 +131,11 @@ input[type=reset]:hover, input[type=submit]:hover {
 .search {
     width: calc(100% - 24px);
     padding-right: 24px;
+}
+.favicon {
+    width: 1.25em;
+    height: 1.25em;
+    margin-right: .125em;
 }
 @media screen and (max-width: 768px) {
     .swoosh {
